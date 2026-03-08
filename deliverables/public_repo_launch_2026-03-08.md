@@ -77,10 +77,9 @@ Observed results:
 
 ## Player Provisional Assessment
 
-- Provisional assessment: the repo is ready for first public push, subject to independent verification
-- Reasons: the GitHub landing page is now coherent, the root repo includes basic public-facing artifacts, the repo is dogfooding its own workflow, and the core scripts still run
-- Known gaps: independent coach verdict still missing; live post-push repo metadata must still be checked and synced
- - Known gaps at close: observer bridge limitation inside Claude Code remains documented rather than fixed; first external dogfood run is still pending
+- Provisional assessment at submission time: the repo looked ready for first public push, subject to independent verification
+- Reasons at submission time: the GitHub landing page was coherent, the root repo included basic public-facing artifacts, the repo was dogfooding its own workflow, and the core scripts still ran
+- Remaining gaps after close: observer bridge limitation inside Claude Code remains documented rather than fixed; first external dogfood run is still pending
 
 Do not record a final verdict here. Final status belongs in the verification section after the coach responds.
 
