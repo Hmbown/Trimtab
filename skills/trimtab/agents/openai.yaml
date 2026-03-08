@@ -1,0 +1,4 @@
+interface:
+  display_name: "Trimtab"
+  short_description: "Bootstrap a self-verifying agent workflow"
+  default_prompt: "Use Trimtab to bootstrap or run an issue-driven closed-loop self-verifying workflow in this repo, defaulting to Claude as orchestrator and Codex as independent verifier. If Linear exists, treat the live issue body as the prompt and the dependency edges as the graph."

@@ -1,0 +1,7 @@
+interface:
+  display_name: "Init Trimtab"
+  short_description: "Install or retune this repo's Trimtab workflow"
+  default_prompt: "Use $init-trimtab to inspect this repository and align its project-local Trimtab workflow to the actual repo, task graph, and verification setup."
+
+policy:
+  allow_implicit_invocation: true

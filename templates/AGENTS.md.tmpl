@@ -1,0 +1,149 @@
+# {{PROJECT_NAME}} — AGENTS.md
+
+## Shared Workspace Rules
+
+- Multiple agents may be reading or editing files concurrently
+- Do not be surprised by file changes you did not make
+- Focus only on your assigned task
+- Do not revert work you did not author unless explicitly instructed
+- Preserve existing instructions and conventions where possible
+- Keep secrets, credentials, and local-machine state out of checked-in artifacts unless the task explicitly requires secure handling
+
+## Session Workflow
+
+### 1. Scope And Dependency Check
+
+Before substantive work:
+
+- Identify the exact task or issue being advanced
+- If Linear or another issue tracker exists, read the live issue body and criteria directly
+- Read the active pass/fail criteria directly
+- Verify that dependencies are actually unblocked
+
+If dependencies are not satisfied, document the blocker and stop.
+
+### 2. Review-First Pass
+
+Before extending existing work:
+
+- Inspect the current work product directly
+- Re-run relevant tests or checks when feasible
+- Look for logic gaps, dependency violations, provenance errors, and evidence gaps
+
+### 3. Fix-First Rule
+
+If review finds a correctness, integrity, or methodology problem:
+
+- Fix it before downstream work, or
+- Document why the task cannot advance
+
+Do not build new work on top of a known flawed upstream result.
+
+### 4. Execution And Handoff
+
+- Do the smallest useful next unit of work
+- Keep exploratory work explicitly labeled
+- Produce reproducible outputs where feasible
+- Tie the work back to the task's pass/fail criteria
+- Leave a durable record of what changed, what evidence exists, what remains, and any blockers, risks, or external dependencies
+- If an issue tracker with dependency edges exists and the current task verifies `PASS`, continue to the next unblocked issue unless priorities change
+
+## Roles
+
+### Player
+
+The agent that performs the work and authors deliverables.
+
+Responsibilities:
+
+- Read the active issue first when one exists; use the dependency graph as a mirror or fallback task surface
+- Produce auditable deliverables tied to those criteria
+- Treat review-only and audit-only batches as real deliverables that still require verification
+- Request verification before closing the task
+
+### Coach
+
+A separate agent or separate reasoning context that verifies deliverables against explicit pass/fail criteria.
+
+Responsibilities:
+
+- Read the deliverable and criteria fresh
+- Evaluate the exact criteria, not the intent
+- Return `PASS`, `FAIL`, or `INSUFFICIENT`
+- Be adversarial and specific
+- Block closure when evidence is incomplete, contradictory, or non-reproducible
+
+### Red Team (Optional)
+
+An adversarial reviewer used when the work is high-risk, safety-relevant, or easy to fool yourself about.
+
+## Sub-Agent Packet
+
+When dispatching a sub-agent, include:
+
+1. The exact task being served
+2. The precise scope
+3. The files or artifacts to inspect
+4. The acceptance criteria
+5. The expected output format
+6. Whether the assignment is execution, review, verification support, or exploratory support
+
+## Verification Protocol
+
+1. Every task must name a deliverable
+2. Every task must state pass/fail criteria
+3. The player submits the deliverable for review
+4. The coach returns `PASS`, `FAIL`, or `INSUFFICIENT`
+5. Only `PASS` allows the task to close
+
+The player may record a provisional assessment, but may not issue final verdict language before the coach responds.
+
+When an issue tracker exists, the issue body is the operative task packet and the dependency edges are the operative graph. Do not require a new bespoke prompt between routine tasks when the next unblocked issue is already clear.
+
+When Codex is being called through Claude MCP for a bounded worker or verifier packet, prefer `approval-policy: never`. Governance should come from task criteria, dependency gates, and coach verdicts rather than interactive approval churn.
+
+## Interaction Rules
+
+### Evidence Chain
+
+Every deliverable should identify:
+
+1. The task it serves
+2. The pass/fail criterion it addresses
+3. The sources, tests, or assumptions it uses
+4. Its current verification state
+
+### Exploratory Status
+
+Exploratory work is allowed, but it must stay clearly labeled and should not be treated as closure evidence by default.
+
+### Audit-Only Batches
+
+An audit or review batch with zero edits is still a deliverable.
+
+- Record the audit memo
+- Mark it `Awaiting Verification`
+- Send it to the coach
+- Do not treat "no fixes needed" as final until the coach returns `PASS`
+
+### Durable Communication
+
+Informal conclusions do not count unless they are captured in durable artifacts such as issue comments, handoff notes, or checked-in documents.
+
+## Quality Standards
+
+1. No claim without evidence
+2. No evidence without provenance
+3. No provenance without reproducibility when reproducibility is feasible
+4. No closure without independent verification
+5. No downstream work on top of a known flawed upstream result
+
+## GitHub Discipline
+
+- Pull requests should cite the task or tasks addressed
+- Pull requests should include the verification result
+- Tasks should be written so another agent can evaluate them without hidden context
+
+## Coordination Rule
+
+The player does the work. The coach checks it. The player does not close its own work without that check.

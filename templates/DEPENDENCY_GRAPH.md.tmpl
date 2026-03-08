@@ -1,0 +1,36 @@
+# {{PROJECT_NAME}} — Dependency Graph
+
+Replace this starter graph with a project-specific one as soon as the repo has been inspected. The graph should be concrete enough that a separate agent can verify every task without hidden context.
+
+If the project uses Linear or another issue tracker with dependency edges, treat that live graph as the operative source of task packets. This file should then act as a mirror, summary, or fallback rather than a competing primary surface.
+
+## Project Goal
+
+Fill in the real project objective here.
+
+## Rules
+
+- Every task must produce a concrete deliverable
+- Every task must list its dependencies
+- Every task must define pass/fail criteria
+- No task or audit batch moves to done without a coach `PASS`
+- If an issue tracker exists, the next unblocked issue is the default next task
+
+## Starter Tasks
+
+| ID | Title | Status | Depends On | Deliverable | Pass/Fail Criteria |
+|---|---|---|---|---|---|
+| CL-000 | Repo intake and constraint inventory | TODO | — | Short repo inventory note in `HANDOFF.md` or `deliverables/` | Existing files, constraints, and operating assumptions are documented clearly |
+| CL-001 | Build the real dependency graph | TODO | CL-000 | Updated `DEPENDENCY_GRAPH.md` | Every meaningful task has dependencies, deliverables, and pass/fail criteria |
+| CL-002 | Validate tools and environment | TODO | CL-000 | Tooling note in `HANDOFF.md` | Required tools are available or missing tools are documented as blockers |
+| CL-003 | Execute first unblocked project task | BLOCKED | CL-001, CL-002 | Project-specific deliverable | Criteria for the first real task pass under independent verification |
+
+## Recommended Task Shape
+
+For each real task, define:
+
+- what it produces
+- what it depends on
+- what passing looks like
+- what failing looks like
+- where the deliverable will live

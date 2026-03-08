@@ -1,0 +1,7 @@
+interface:
+  display_name: "Init Trimtab"
+  short_description: "Install or retune Trimtab for a specific repo"
+  default_prompt: "Use $init-trimtab to inspect this repository and install or retune a project-local Trimtab workflow, with a shared protocol file, a Claude /init-trimtab command, and a repo-stored Codex skill source. If Linear exists, make the issue body the operative task packet and the dependency edges the live graph."
+
+policy:
+  allow_implicit_invocation: true

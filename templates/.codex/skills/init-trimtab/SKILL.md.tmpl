@@ -1,0 +1,18 @@
+---
+name: init-trimtab
+description: "Use when the user asks for $init-trimtab or wants this repository's Trimtab workflow installed or retuned to match the actual project constraints."
+---
+
+# $init-trimtab
+
+Read `.trimtab/init-trimtab-protocol.md` first and follow it exactly.
+
+This skill is intentionally thin. The canonical project-local instructions live in the shared protocol file so Claude Code and Codex stay aligned.
+
+Rules:
+
+- inspect the repo before editing
+- preserve stronger existing instructions where they already exist
+- keep `CLAUDE.md`, `AGENTS.md`, `DEPENDENCY_GRAPH.md`, `HANDOFF.md`, and the shared protocol aligned
+- if you change the protocol, keep the Claude command and this skill consistent with it
+- if Linear exists, make it the primary live task surface instead of inventing a second prompt layer

@@ -1,0 +1,32 @@
+{
+  "name": "trimtab",
+  "version": "0.1.0",
+  "description": "GitHub-ready starter repo for self-verifying player/coach AI project loops.",
+  "license": "MIT",
+  "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Hmbown/Trimtab.git"
+  },
+  "homepage": "https://github.com/Hmbown/Trimtab#readme",
+  "bugs": {
+    "url": "https://github.com/Hmbown/Trimtab/issues"
+  },
+  "scripts": {
+    "doctor": "./scripts/doctor.sh",
+    "bootstrap": "node ./scripts/bootstrap-workspace.mjs",
+    "install:codex-mcp": "node ./scripts/setup-claude-mcp.mjs",
+    "install:codex-mcp:observer": "node ./scripts/setup-claude-mcp.mjs --observer"
+  },
+  "keywords": [
+    "ai",
+    "agents",
+    "verification",
+    "claude-code",
+    "codex",
+    "workflow"
+  ],
+  "engines": {
+    "node": ">=18"
+  }
+}

@@ -1,0 +1,106 @@
+# {{PROJECT_NAME}} — Init Trimtab Protocol
+
+Use this protocol when initializing or retuning the Trimtab workflow for this repository.
+
+## Purpose
+
+Adapt Trimtab to the actual project rather than leaving generic starter boilerplate behind.
+
+The shared goal is:
+
+- one project-local protocol that travels with the repo
+- one Claude Code entrypoint for `/init-trimtab`
+- one repo-stored Codex skill source for `$init-trimtab`, activated by local registration
+- workflow docs, dependency graph, and verification rules matched to this codebase
+
+If the repo uses Linear, the desired operating model is:
+
+- the Linear issue body serves as the task packet
+- `blockedBy` or equivalent edges serve as the operative dependency graph
+- issue comments and status changes carry the durable work trail
+- the next unblocked issue becomes the default next task without requiring a fresh bespoke prompt
+- local markdown files support that flow instead of replacing it
+
+## Default Topology
+
+Default to the safest version unless this repo already has a better explicit one:
+
+- **Orchestrator / player:** Claude Code
+- **Worker sub-agents:** Claude and/or Codex sub-agents
+- **Closure verifier / coach:** fresh Codex context
+
+If the repo already uses a different topology and it is explicit, coherent, and independently verifiable, preserve it and record why.
+
+## Repo Audit
+
+Before editing anything, inspect:
+
+1. `README.md`
+2. existing `CLAUDE.md`, `AGENTS.md`, `DEPENDENCY_GRAPH.md`, and `HANDOFF.md`
+3. `.github/` templates and workflows
+4. build, test, lint, and deploy entrypoints
+5. issue-tracker or graph surfaces such as Linear, beads, Jira, or GitHub Issues
+6. any existing `.claude/commands/`, `.claude/agents/`, and `.codex/skills/`
+
+## Decide The Mode
+
+Choose one:
+
+- **Bootstrap:** the repo does not have a usable workflow yet
+- **Protocol upgrade:** the repo has one, but it is weaker than the actual needs
+- **Retune:** the repo already has Trimtab-like files and they should be updated to match the real project
+
+## Required Outputs
+
+When you finish, these surfaces should agree with each other:
+
+- `CLAUDE.md`
+- `AGENTS.md`
+- `DEPENDENCY_GRAPH.md` or the repo's real dependency-graph surface
+- `HANDOFF.md`
+- `.trimtab/init-trimtab-protocol.md`
+- `.claude/commands/init-trimtab.md`
+- `.codex/skills/init-trimtab/`
+
+If the repo uses different names or locations, preserve the real surface and document the deviation.
+
+## Tailoring Rules
+
+- Preserve existing high-signal instructions
+- Replace only generic starter language that is weaker than the repo's real conventions
+- Do not flatten issue-tracker usage out of the workflow if the repo actually depends on it
+- Capture the repo's real evidence surfaces: tests, scripts, screenshots, deliverables, comments, or issue updates
+- Keep exploratory work labeled and keep closure evidence reproducible when feasible
+- Use `Backlog -> In Progress -> Awaiting Verification -> Done` unless the repo already has a better explicit task-state model
+- Make the no-self-verdict rule explicit: audit-only or zero-edit batches still require an external coach before anyone says `PASS` or "no fixes needed"
+- If Linear exists, make the issue body, criteria, and dependency edges the primary task packet
+- If Linear exists, make the waterfall rule explicit: once an issue is verified and closed, the player should move to the next unblocked issue unless the operator reprioritizes
+- If the repo uses Codex through Claude MCP, prefer `approval-policy: never` for bounded worker and verifier packets; the real approval surface should be the issue criteria, dependency gates, and coach verdict
+
+## Claude Code Surface
+
+The stable shared Claude Code entrypoint is the project command:
+
+- `.claude/commands/init-trimtab.md`
+
+Keep it thin. It should point back to this protocol and then execute it.
+
+## Codex Surface
+
+Store the Codex skill source in:
+
+- `.codex/skills/init-trimtab/`
+
+Keep it thin too. It should point back to this protocol and then execute it.
+
+If the operator wants `$init-trimtab` available in Codex, they may need to register the checked-in path `.codex/skills/init-trimtab/SKILL.md` in `~/.codex/config.toml`.
+
+## Finish
+
+Leave a durable note of:
+
+- what was inspected
+- what was changed
+- what topology was selected
+- what remains to tailor further
+- the next unblocked task, if any

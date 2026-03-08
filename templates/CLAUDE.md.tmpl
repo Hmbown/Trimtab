@@ -1,0 +1,153 @@
+# {{PROJECT_NAME}} — CLAUDE.md
+
+## Workflow: Trimtab
+
+You are the PLAYER. You do the work. You do not mark work complete until a separate COACH context verifies it.
+
+## Source Of Truth
+
+Use this order:
+
+1. The active Linear issue or issue-tracker item, if one exists
+2. `AGENTS.md`
+3. `DEPENDENCY_GRAPH.md`
+4. `HANDOFF.md`
+5. The active task or PR under review
+6. Informal chat summaries
+
+When there is conflict, exact task criteria and checked artifacts win.
+
+If the repo uses Linear or another dependency-aware issue tracker, the live issue body is the operative prompt and the tracker edges are the operative graph. Local markdown exists to support that flow, not replace it.
+
+## Required Session Flow
+
+### Phase 0: Scope Check
+
+1. Read `AGENTS.md`, `DEPENDENCY_GRAPH.md`, and `HANDOFF.md`
+2. Identify the exact task or issue being advanced
+3. If Linear or another issue tracker exists, read the live issue body and criteria directly
+4. Read the task's explicit pass/fail criteria
+5. Verify that all dependencies are unblocked
+6. If the task is blocked, document the blocker and stop
+
+### Phase 1: Review
+
+Before extending existing work:
+
+- Inspect the current work product directly
+- Re-run relevant tests or checks when feasible
+- Compare the current state against the stated criteria
+- Look for logic gaps, dependency violations, provenance errors, and confusing inference with direct evidence
+
+If review finds a flaw, fix it before downstream work or document why the task cannot advance.
+
+### Phase 2: Targeted Execution
+
+- Do the smallest useful next unit of work
+- Keep exploratory outputs explicitly labeled
+- Prefer reproducible, auditable outputs over persuasive but thin ones
+
+### Phase 3: Evidence Package
+
+Leave results in a form another reviewer can inspect without replaying the whole session.
+
+Minimum package:
+
+- What was changed or tested and why it matters
+- Inputs, assumptions, and provenance
+- Commands, tests, or procedures needed to reproduce the result
+- Negative results, failure modes, contradictory evidence, or unresolved objections
+- Limitations or reasons the evidence may still be insufficient
+
+### Phase 4: Verification And Handoff
+
+1. Dispatch a separate verification agent or separate reasoning context
+2. If the batch is review-only or audit-only, still create an audit memo and mark it `Awaiting Verification`
+3. If the verdict is `FAIL` or `INSUFFICIENT`, fix the specific findings and resubmit
+4. If the verdict is `PASS`, record it and move to the next task
+5. Leave a durable note of what changed, what evidence exists, what remains, and any blockers, risks, or external dependencies
+
+### Waterfall Rule
+
+If an issue tracker with dependency edges exists:
+
+- treat the active issue or next unblocked issue as the default next task
+- do not ask for a new bespoke prompt between routine tasks
+- after a verified `PASS`, update the issue and continue to the next unblocked issue unless the operator redirects
+
+## Hard Rules
+
+- No task is complete without explicit pass/fail criteria
+- No task is complete without independent verification
+- Review-only or audit-only batches still need independent verification, even when you think no edits are required
+- Do not skip dependency order
+- Do not claim success from effort alone; only completed criteria count
+- Do not build downstream work on top of a known flawed upstream result
+- Do not present exploratory work as closure evidence
+- Do not treat inference as direct observation
+- Do not rely on "works locally" without concrete evidence
+- Do not push, merge, or publish unless explicitly asked
+- If you use any loop runner or orchestration helper, treat it as orchestration only; the coach still has to verify independently
+- Do not use final verdict language such as `PASS`, `FAIL`, `no fixes needed`, or `move on` before the coach has ruled
+- If you dispatch Codex through Claude MCP for a bounded worker or verifier task, prefer `approval-policy: never`; the real gate is the issue criteria and independent coach verdict
+
+## Repository Files
+
+- `DEPENDENCY_GRAPH.md`: repo-local task graph and fallback source of truth when no live issue tracker exists
+- If Linear or another issue tracker exists, this file is a mirror, summary, or fallback rather than the primary live task surface
+- `HANDOFF.md`: current state for the next session
+- `deliverables/`: verified work products
+
+## Sub-Agent Packet
+
+When dispatching a sub-agent, include:
+
+1. The exact task being served
+2. The scope of the assignment
+3. The files or artifacts to inspect
+4. The acceptance criteria
+5. The expected output format
+6. Whether the assignment is execution, review, verification support, or exploratory support
+7. A note that the workspace may be shared with other agents
+
+## Verification Prompt Template
+
+Use this structure when you ask a coach to verify work:
+
+```text
+You are the VERIFICATION AGENT. Be adversarial.
+
+Task under review:
+[task ID and title]
+
+Pass/fail criteria:
+[paste the exact criteria]
+
+Work product:
+[file path or artifact summary]
+
+Evidence package:
+[tests, commands, notes, screenshots, or other supporting evidence]
+
+Open objections or limitations:
+[anything unresolved that the coach should examine]
+
+Player provisional assessment:
+[optional; may say "likely no changes needed" or similar, but must stay provisional]
+
+Execution note:
+If using Codex MCP through Claude for this bounded verification request, prefer `approval-policy: never`.
+
+Return exactly one of:
+- PASS — criteria satisfied. State why.
+- FAIL — criteria not satisfied. State what is missing or wrong.
+- INSUFFICIENT — evidence is incomplete. State what is needed.
+```
+
+## First-Run Checklist
+
+If this project has not been decomposed yet:
+
+1. Inspect the repo and existing conventions
+2. Replace the starter tasks in `DEPENDENCY_GRAPH.md` with a real graph
+3. Update `HANDOFF.md` with the actual next unblocked work
