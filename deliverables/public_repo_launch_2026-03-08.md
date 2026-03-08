@@ -55,6 +55,8 @@ node scripts/setup-claude-mcp.mjs --observer --dry-run
 ./scripts/doctor.sh
 node scripts/trimtab-codex-mcp-bridge.mjs --help
 gh repo view Hmbown/Trimtab --json name,description,defaultBranchRef,visibility,url,isEmpty
+gh repo edit Hmbown/Trimtab --description "Self-verifying agent workflow starter for real software projects." --add-topic ai-agents --add-topic claude-code --add-topic codex --add-topic verification --add-topic workflow --add-topic linear
+git push -u origin main
 ```
 
 Observed results:
@@ -64,6 +66,8 @@ Observed results:
 - Doctor completed successfully
 - Bridge help output executed successfully
 - GitHub confirmed `Hmbown/Trimtab` existed publicly and was empty before first push
+- Initial commit was pushed successfully to `main`
+- GitHub repo description was updated and topics were added
 
 ## Completeness Check
 
@@ -76,6 +80,7 @@ Observed results:
 - Provisional assessment: the repo is ready for first public push, subject to independent verification
 - Reasons: the GitHub landing page is now coherent, the root repo includes basic public-facing artifacts, the repo is dogfooding its own workflow, and the core scripts still run
 - Known gaps: independent coach verdict still missing; live post-push repo metadata must still be checked and synced
+ - Known gaps at close: observer bridge limitation inside Claude Code remains documented rather than fixed; first external dogfood run is still pending
 
 Do not record a final verdict here. Final status belongs in the verification section after the coach responds.
 

@@ -12,7 +12,7 @@
 
 - Repository: `Hmbown/Trimtab`
 - Active tracker: none; local graph is currently authoritative
-- Status: public repo launch verified locally; ready for first public push and GitHub metadata sync
+- Status: public repo launched; GitHub metadata synced; next unblocked work is first external dogfood task
 - GitHub repo: `https://github.com/Hmbown/Trimtab`
 
 ## Latest Deliverable
@@ -21,14 +21,17 @@
 
 ## Next Unblocked Work
 
-1. Push the verified repo to `https://github.com/Hmbown/Trimtab`
-2. Sync GitHub repo description and topics to match the public README
-3. Move to TT-003 or TT-004 depending on priority
+1. Run the first real external dogfood bootstrap and verification cycle for TT-003
+2. Continue TT-004 if observer-bridge validation inside Claude Code becomes a priority
+3. Keep the live repo description/topics aligned with the README as the project evolves
 
 ## Open Risks
 
 - The Codex MCP observer bridge remains limited by Claude Code's SDK launch path
 - Real-world dogfooding in an external repo is still needed after launch verification
+- Live repo metadata as of 2026-03-08:
+  - description: `Self-verifying agent workflow starter for real software projects.`
+  - topics: `agents`, `ai`, `ai-agents`, `claude-code`, `codex`, `linear`, `verification`, `workflow`
 
 ## Verification Record
 
