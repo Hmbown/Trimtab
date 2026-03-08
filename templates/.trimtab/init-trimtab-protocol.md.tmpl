@@ -36,6 +36,14 @@ Topology invariant:
 - allow `Codex -> Codex` when this repo is Codex-led, as long as the coach is a fresh separate Codex context
 - treat other non-Claude player -> Codex variants as optional future patterns, not the default
 
+Override conditions:
+
+- Codex is unavailable in the environment
+- the operator explicitly asks for a different topology
+- this repo already has a stronger explicit topology the operator wants to preserve
+
+If the default is overridden, record the reason explicitly in `HANDOFF.md` or the equivalent durable state surface.
+
 Default authority boundary:
 
 - the Codex coach is the only verifier

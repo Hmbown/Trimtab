@@ -43,6 +43,14 @@ Invalid default topology:
 
 The invariant is: the coach must not be Claude unless the user explicitly chooses and accepts that weaker topology.
 
+Override conditions:
+
+- if Codex is unavailable in the environment
+- if the user explicitly asks for a different topology
+- if the target repo already has a stronger explicit non-default topology and the operator wants to preserve it
+
+If you override the default, state the reason briefly and record that the default `never Claude -> Claude` rule was intentionally waived for this run.
+
 ## Authority Boundary
 
 Unless the user explicitly changes the topology, enforce this boundary:
@@ -53,6 +61,8 @@ Unless the user explicitly changes the topology, enforce this boundary:
 - worker contexts, including Codex workers, should not directly update Linear; they hand evidence back to the coach or orchestrator
 
 If Linear needs to be read or updated, route that through the coach context. If the player needs the issue packet, fetch it through the coach or from a checked local mirror rather than letting the player become the Linear actor.
+
+If the default boundary is overridden because Codex is unavailable or the user explicitly asked otherwise, say so explicitly before proceeding.
 
 ## Core Contract
 
@@ -281,6 +291,8 @@ Claude is not an acceptable verifier for `/trimtab` unless the user explicitly c
 Codex workers are not acceptable substitutes for the coach when posting tracker updates. Verification authority and Linear authority both stay with the coach.
 
 `Claude -> Claude` is explicitly disallowed as the default Trimtab pattern.
+
+It may be used only as an explicit fallback when Codex is unavailable or the user deliberately requests it.
 
 When using Codex through MCP inside Claude Code, prefer `approval-policy: never` for bounded worker and verification packets. The real approval surface should be the issue criteria, dependency gates, and independent coach verdict, not a stream of interactive permission prompts.
 
