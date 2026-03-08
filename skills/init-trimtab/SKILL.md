@@ -24,6 +24,15 @@ Prefer a checked-in, project-local setup over a user-global-only setup:
 
 This keeps the repo's workflow inspectable and versioned with the repo itself.
 
+Default to the thinnest useful installation.
+
+That means:
+
+- prefer adapting existing repo surfaces over creating new ones
+- only create missing files when there is no strong equivalent already present
+- if the repo already has a task queue, handoff file, issue tracker, or instruction surface, hook Trimtab into it instead of replacing it
+- do not create extra workflow files just because the starter repo happens to use them
+
 When a repo uses Linear, the ideal end state is:
 
 - the Linear issue body is the operative prompt
@@ -83,6 +92,8 @@ If the repo does not use one of these exact files, adapt to the repo's real surf
 
 - Do not overwrite existing instructions blindly
 - Do not invent a dependency graph if the repo already has one elsewhere
+- Do not create a new local dependency graph if the repo already has a real operative task surface such as Linear, GitHub Issues, beads, or an existing handoff/task file
+- Do not create duplicate handoff or queue files when the repo already has a strong equivalent
 - Do not strip out issue-tracker integration just because the starter is generic
 - Do not assume the safest default is always the final topology
 - Keep the Claude and Codex entrypoints thin and aligned to the shared protocol file
@@ -90,6 +101,8 @@ If the repo does not use one of these exact files, adapt to the repo's real surf
 - Install the no-self-verdict rule explicitly: review-only or zero-edit batches still go to an external coach before anyone says `PASS` or "no fixes needed"
 - If Linear exists, make the issue body, criteria, and dependency edges the primary task packet
 - If Linear exists, make the waterfall rule explicit: after a verified issue closes, the player should continue to the next unblocked issue unless the operator reprioritizes
+- If the repo already has a rich queue or issue graph, do not spend the session rebuilding it from scratch unless the user explicitly asked for that migration
+- Ask clarifying questions only when blocked by missing authority, missing external information, or a genuinely ambiguous mapping between Trimtab and the repo's existing workflow
 - If the repo uses Codex through Claude MCP, recommend `approval-policy: never` for bounded worker and verifier packets; the real gate should be issue criteria plus independent verification
 - If the repo wants orchestrator-side visibility into live Codex MCP work, consider the optional Trimtab observer bridge; describe it honestly as a local observer surface, not a shared collaboration layer
 

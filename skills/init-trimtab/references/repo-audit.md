@@ -75,3 +75,5 @@ This keeps the skill versioned with the repo while avoiding a global-only skill 
 - Map Trimtab concepts onto the repo's actual vocabulary when appropriate
 - Keep the canonical protocol in one shared file and make wrappers thin
 - Record any deliberate deviations from the safest default topology
+- Prefer adaptation over multiplication: if the repo already has a strong surface for task state, handoff, or instructions, wire Trimtab into it instead of creating another competing file
+- Before creating `DEPENDENCY_GRAPH.md` or `HANDOFF.md`, ask whether the repo already has a real equivalent and whether a mirror file would actually help
