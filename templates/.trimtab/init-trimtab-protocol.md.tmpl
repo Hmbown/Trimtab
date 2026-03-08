@@ -29,6 +29,20 @@ Default to the safest version unless this repo already has a better explicit one
 - **Worker sub-agents:** Claude and/or Codex sub-agents
 - **Closure verifier / coach:** fresh Codex context
 
+Topology invariant:
+
+- never use `Claude -> Claude` as the default player/coach pattern
+- prefer `Claude -> Codex` by default
+- allow `Codex -> Codex` when this repo is Codex-led, as long as the coach is a fresh separate Codex context
+- treat other non-Claude player -> Codex variants as optional future patterns, not the default
+
+Default authority boundary:
+
+- the Codex coach is the only verifier
+- the Codex coach is the only actor allowed to touch Linear in the Trimtab loop
+- Claude may orchestrate and edit local files, but should not itself verify or post workflow updates to Linear unless this repo explicitly chooses another topology
+- worker contexts, including Codex workers, should not directly update Linear; they return evidence to the coach or orchestrator
+
 If the repo already uses a different topology and it is explicit, coherent, and independently verifiable, preserve it and record why.
 
 ## Repo Audit
@@ -75,6 +89,7 @@ If the repo uses different names or locations, preserve the real surface and doc
 - Make the no-self-verdict rule explicit: audit-only or zero-edit batches still require an external coach before anyone says `PASS` or "no fixes needed"
 - If Linear exists, make the issue body, criteria, and dependency edges the primary task packet
 - If Linear exists, make the waterfall rule explicit: once an issue is verified and closed, the player should move to the next unblocked issue unless the operator reprioritizes
+- If Linear exists, make the authority boundary explicit: the Codex coach handles Linear reads/writes and verification; Claude orchestrates unless the repo explicitly chooses another topology
 - Make the anti-chatter rule explicit: if the next unblocked task is already discoverable, the player should continue working instead of asking the operator what to do next
 - Make the question threshold explicit: the player should ask only when blocked by missing authority, missing external information, or a materially ambiguous fork
 - If the repo uses Codex through Claude MCP, prefer `approval-policy: never` for bounded worker and verifier packets; the real approval surface should be the issue criteria, dependency gates, and coach verdict

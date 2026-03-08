@@ -67,6 +67,13 @@ Minimum package:
 4. If the verdict is `PASS`, record it and move to the next task
 5. Leave a durable note of what changed, what evidence exists, what remains, and any blockers, risks, or external dependencies
 
+Before finalizing:
+
+- check correctness against every stated criterion
+- check grounding against code, tests, docs, and tool outputs
+- check formatting against the required deliverable or tracker structure
+- if the next step has external side effects, confirm permission first
+
 ### Waterfall Rule
 
 If an issue tracker with dependency edges exists:
@@ -95,6 +102,8 @@ If there is a reachable queue of unblocked work, default to sustained execution 
 - If you dispatch Codex through Claude MCP for a bounded worker or verifier task, prefer `approval-policy: never`; the real gate is the issue criteria and independent coach verdict
 - Do not stop to ask for the next step when the next unblocked task is already discoverable from the issue graph, handoff, or dependency graph
 - Ask questions only when blocked by missing authority, missing external information, or a materially ambiguous fork
+- If a lookup returns empty or suspiciously narrow results, try a fallback retrieval strategy before concluding the data does not exist
+- Do not take irreversible or high-impact external actions without an explicit permission check
 
 ## Repository Files
 

@@ -25,6 +25,35 @@ Default to the safest profile unless the user asks otherwise:
 
 The point is not that Codex does all the work. The point is that closure verification stays independent.
 
+## Allowed Topologies
+
+Valid default topologies:
+
+- `Claude -> Codex`
+- `Codex -> Codex` using a fresh Codex coach context
+
+Potentially valid but not yet the default:
+
+- `Gemini -> Codex`
+- other non-Claude player -> Codex patterns
+
+Invalid default topology:
+
+- `Claude -> Claude`
+
+The invariant is: the coach must not be Claude unless the user explicitly chooses and accepts that weaker topology.
+
+## Authority Boundary
+
+Unless the user explicitly changes the topology, enforce this boundary:
+
+- only the Codex coach may issue verification verdicts by default
+- only the Codex coach may touch Linear as part of the Trimtab loop
+- Claude may orchestrate, summarize, and edit local repo files, but it must not act as the verifier and must not itself post verification comments or status changes to Linear
+- worker contexts, including Codex workers, should not directly update Linear; they hand evidence back to the coach or orchestrator
+
+If Linear needs to be read or updated, route that through the coach context. If the player needs the issue packet, fetch it through the coach or from a checked local mirror rather than letting the player become the Linear actor.
+
 ## Core Contract
 
 - The player does the work
@@ -35,6 +64,8 @@ The point is not that Codex does all the work. The point is that closure verific
 - Every closure-ready task must pass through an explicit verification packet
 - Every completed audit batch, including zero-edit or "no changes needed" batches, must pass through an explicit verification packet
 - Only `PASS` allows a task to move to `Done`
+- Only the Codex coach may return `PASS`, `FAIL`, or `INSUFFICIENT` in the Trimtab loop
+- Only the Codex coach may touch Linear during the Trimtab loop
 
 ## Default Execution Bias
 
@@ -53,6 +84,19 @@ Do **not** stop after one small step and ask "what next?" if the next unblocked 
 Do **not** ask the user to restate a task that already exists in Linear, GitHub Issues, `HANDOFF.md`, or `DEPENDENCY_GRAPH.md`.
 
 The desired operator experience is: invoke `/trimtab`, then the player works quietly and continuously until it reaches a real blocker, an external dependency, or a clean verification boundary.
+
+## Default Follow-Through Policy
+
+If the user's intent is clear and the next step is reversible and low-risk, proceed without asking.
+
+Ask permission only when the next step:
+
+- is irreversible
+- has meaningful external side effects such as sending, purchasing, deleting, publishing, or writing to production
+- requires missing sensitive information
+- requires a choice that would materially change the outcome and cannot be resolved from the repo or task surface
+
+If proceeding, briefly state what you did and continue.
 
 Prefer the task state model:
 
@@ -174,6 +218,44 @@ After step 10, repeat automatically while:
 
 The default `/trimtab` posture is persistent progress, not one-turn compliance.
 
+## Completeness Contract
+
+Treat `/trimtab` work as incomplete until all requested deliverables are either:
+
+- completed and recorded, or
+- explicitly marked blocked with the exact missing dependency or authority
+
+For issue queues, batches, or paginated tracker results:
+
+- determine the expected scope when possible
+- keep track of which issues or items have been processed
+- confirm coverage before claiming the queue is exhausted
+
+Do not treat a narrow retrieval, one visible issue, or one completed edit as the end of the job unless the task surface actually says it is.
+
+## Tool Persistence And Dependency Checks
+
+- Use tools whenever they materially improve correctness, completeness, or grounding.
+- Do not stop early when another tool call is likely to improve correctness or completeness.
+- Before taking an action, check whether prerequisite discovery, lookup, or retrieval steps are required.
+- Do not skip prerequisite steps just because the intended final action seems obvious.
+- If a later action depends on the output of an earlier step, resolve that dependency first.
+- When multiple retrieval steps are independent, prefer selective parallel calls; when they are dependent, sequence them.
+
+## Empty-Result Recovery
+
+If a lookup returns empty, partial, or suspiciously narrow results:
+
+- do not immediately conclude that nothing exists
+- try at least one or two fallback strategies such as:
+  - alternate query wording
+  - broader filters
+  - a prerequisite lookup
+  - or a different source or tool
+- only then report that no results were found, along with what was tried
+
+This applies especially to issue trackers, repo search, and evidence gathering. One empty call is not enough to declare the queue empty or the evidence absent.
+
 ## Sub-Agent Rules
 
 Use sub-agents aggressively, but keep packets tight.
@@ -194,6 +276,12 @@ The orchestrator owns synthesis. Sub-agents return auditable work products.
 
 Verification should be done in a fresh context, defaulting to Codex with the narrowest permissions that still allow inspection.
 
+Claude is not an acceptable verifier for `/trimtab` unless the user explicitly changes the topology. "Independent Claude context" is not sufficient under the default contract.
+
+Codex workers are not acceptable substitutes for the coach when posting tracker updates. Verification authority and Linear authority both stay with the coach.
+
+`Claude -> Claude` is explicitly disallowed as the default Trimtab pattern.
+
 When using Codex through MCP inside Claude Code, prefer `approval-policy: never` for bounded worker and verification packets. The real approval surface should be the issue criteria, dependency gates, and independent coach verdict, not a stream of interactive permission prompts.
 
 The verification request must include:
@@ -207,9 +295,20 @@ The verification request must include:
 
 This applies even when the player's claim is "no changes are needed." Zero-edit batches still need an external coach verdict.
 
+If the repo uses Linear, the verification comment, verdict record, issue-state update, and any tracker synchronization should be executed by the coach, not by Claude and not by a worker.
+
 Do not let the verifier grade intent. The verifier checks the actual criteria.
 
 Use the strongest available verification model. GPT-5.4-class verification is the intended bar when the environment supports it; otherwise use the strongest available independent coach and record the limitation.
+
+Before finalizing a task, run a lightweight verification loop:
+
+- correctness: did the work satisfy every stated criterion?
+- grounding: are claims backed by code, docs, tests, or tool outputs?
+- formatting: do the deliverable and tracker updates match the expected structure?
+- safety: if the next step has external side effects, confirm permission first
+
+If required context is missing, do not guess. Prefer another lookup or retrieval step first; ask a minimal clarifying question only when the missing context cannot be retrieved.
 
 ## Optional Observer Bridge
 

@@ -59,6 +59,8 @@ When the user gives you a target path:
 - If you dispatch Codex through Claude MCP for a bounded worker or verifier task, prefer `approval-policy: never`; the real gate is the issue criteria and independent coach verdict
 - Do not keep stopping to ask for the next step when the next unblocked task is already discoverable from the repo, issue graph, handoff, or dependency graph
 - Ask questions only when there is a real blocker, missing authority, missing external information, or a materially ambiguous fork that would risk wasted work
+- If a lookup returns empty or suspiciously narrow results, try a fallback retrieval strategy before concluding the data does not exist
+- Do not take irreversible or high-impact external actions without an explicit permission check
 
 ## Zero Tolerance
 
@@ -132,6 +134,13 @@ Every substantial session should end with an explicit record:
 - Note blockers, risks, and what remains
 
 Only `PASS` allows closure.
+
+Before finalizing:
+
+- check correctness against every stated criterion
+- check grounding against code, tests, docs, and tool outputs
+- check formatting against the required deliverable or tracker structure
+- if the next step has external side effects, confirm permission first
 
 ## Waterfall Rule
 

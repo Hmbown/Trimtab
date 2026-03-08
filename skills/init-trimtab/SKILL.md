@@ -74,6 +74,20 @@ Default to the safest profile unless the repo already has a better explicit one:
 
 This is a default, not a prison. Preserve a project-specific topology if it is already explicit, coherent, and independently verifiable.
 
+Topology invariant:
+
+- never scaffold `Claude -> Claude` as the default player/coach pattern
+- prefer `Claude -> Codex` by default
+- allow `Codex -> Codex` when the repo is Codex-led, as long as the coach is a fresh separate Codex context
+- treat other non-Claude player -> Codex variants as optional future patterns, not the default
+
+Default authority boundary:
+
+- the Codex coach is the only verifier
+- the Codex coach is the only actor allowed to touch Linear in the Trimtab loop
+- Claude may orchestrate and edit local files, but should not itself verify or post workflow updates to Linear unless the repo explicitly wants a different topology
+- worker contexts, including Codex workers, should not directly update Linear; they return evidence to the coach or orchestrator
+
 ## Required Outputs
 
 When you initialize or retune a repo, leave these surfaces aligned:
@@ -101,6 +115,7 @@ If the repo does not use one of these exact files, adapt to the repo's real surf
 - Install the no-self-verdict rule explicitly: review-only or zero-edit batches still go to an external coach before anyone says `PASS` or "no fixes needed"
 - If Linear exists, make the issue body, criteria, and dependency edges the primary task packet
 - If Linear exists, make the waterfall rule explicit: after a verified issue closes, the player should continue to the next unblocked issue unless the operator reprioritizes
+- If Linear exists, make the authority boundary explicit: the Codex coach handles Linear reads/writes and verification; Claude orchestrates unless the repo explicitly chooses another topology
 - If the repo already has a rich queue or issue graph, do not spend the session rebuilding it from scratch unless the user explicitly asked for that migration
 - Ask clarifying questions only when blocked by missing authority, missing external information, or a genuinely ambiguous mapping between Trimtab and the repo's existing workflow
 - If the repo uses Codex through Claude MCP, recommend `approval-policy: never` for bounded worker and verifier packets; the real gate should be issue criteria plus independent verification
