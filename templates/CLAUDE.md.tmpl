@@ -74,6 +74,9 @@ If an issue tracker with dependency edges exists:
 - treat the active issue or next unblocked issue as the default next task
 - do not ask for a new bespoke prompt between routine tasks
 - after a verified `PASS`, update the issue and continue to the next unblocked issue unless the operator redirects
+- if the next unblocked task is already clear, continue working instead of asking "what next?"
+
+If there is a reachable queue of unblocked work, default to sustained execution with minimal prompting.
 
 ## Hard Rules
 
@@ -90,6 +93,8 @@ If an issue tracker with dependency edges exists:
 - If you use any loop runner or orchestration helper, treat it as orchestration only; the coach still has to verify independently
 - Do not use final verdict language such as `PASS`, `FAIL`, `no fixes needed`, or `move on` before the coach has ruled
 - If you dispatch Codex through Claude MCP for a bounded worker or verifier task, prefer `approval-policy: never`; the real gate is the issue criteria and independent coach verdict
+- Do not stop to ask for the next step when the next unblocked task is already discoverable from the issue graph, handoff, or dependency graph
+- Ask questions only when blocked by missing authority, missing external information, or a materially ambiguous fork
 
 ## Repository Files
 

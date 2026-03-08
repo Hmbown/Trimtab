@@ -75,6 +75,8 @@ If the repo uses different names or locations, preserve the real surface and doc
 - Make the no-self-verdict rule explicit: audit-only or zero-edit batches still require an external coach before anyone says `PASS` or "no fixes needed"
 - If Linear exists, make the issue body, criteria, and dependency edges the primary task packet
 - If Linear exists, make the waterfall rule explicit: once an issue is verified and closed, the player should move to the next unblocked issue unless the operator reprioritizes
+- Make the anti-chatter rule explicit: if the next unblocked task is already discoverable, the player should continue working instead of asking the operator what to do next
+- Make the question threshold explicit: the player should ask only when blocked by missing authority, missing external information, or a materially ambiguous fork
 - If the repo uses Codex through Claude MCP, prefer `approval-policy: never` for bounded worker and verifier packets; the real approval surface should be the issue criteria, dependency gates, and coach verdict
 
 ## Claude Code Surface

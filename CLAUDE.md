@@ -57,6 +57,8 @@ When the user gives you a target path:
 - Keep exploratory work explicitly labeled; do not present it as closure evidence
 - Leave durable evidence and handoff notes, not just chat conclusions
 - If you dispatch Codex through Claude MCP for a bounded worker or verifier task, prefer `approval-policy: never`; the real gate is the issue criteria and independent coach verdict
+- Do not keep stopping to ask for the next step when the next unblocked task is already discoverable from the repo, issue graph, handoff, or dependency graph
+- Ask questions only when there is a real blocker, missing authority, missing external information, or a materially ambiguous fork that would risk wasted work
 
 ## Zero Tolerance
 
@@ -138,6 +140,9 @@ When the target workspace has Linear or another dependency-aware issue tracker:
 - start from the active issue or the next unblocked issue
 - do not rely on a fresh bespoke prompt between routine tasks
 - after a verified `PASS`, update the issue and continue to the next unblocked issue unless the user reprioritizes
+- if the next unblocked task is already clear, keep going without asking "what next?"
+
+If the task surface shows a continuous queue of reachable work, default to sustained execution rather than conversational check-ins.
 
 ## Sub-Agent Packet Standard
 
@@ -180,3 +185,5 @@ When you dispatch a sub-agent, include:
 ## First Response Pattern
 
 If a user asks you to use this repo for setup, your first step is to identify the target workspace and inspect it. If the target is already given, do not ask unnecessary questions. Inspect, scaffold, tailor, and verify.
+
+If the user invokes `/trimtab` as an execution mode, treat that as permission to work through the reachable task queue with minimal prompting until you hit a real blocker or verification boundary.

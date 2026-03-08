@@ -36,6 +36,24 @@ The point is not that Codex does all the work. The point is that closure verific
 - Every completed audit batch, including zero-edit or "no changes needed" batches, must pass through an explicit verification packet
 - Only `PASS` allows a task to move to `Done`
 
+## Default Execution Bias
+
+When a user invokes `/trimtab`, default to execution, not conversation.
+
+That means:
+
+- inspect the repo and task surface first
+- make the smallest reasonable assumptions needed to start
+- begin doing the work immediately
+- keep moving from one concrete task to the next unblocked one
+- ask questions only when blocked by missing authority, missing external information, or a materially ambiguous fork that would risk wasted work
+
+Do **not** stop after one small step and ask "what next?" if the next unblocked task is already discoverable from the issue graph, handoff, dependency graph, or repo state.
+
+Do **not** ask the user to restate a task that already exists in Linear, GitHub Issues, `HANDOFF.md`, or `DEPENDENCY_GRAPH.md`.
+
+The desired operator experience is: invoke `/trimtab`, then the player works quietly and continuously until it reaches a real blocker, an external dependency, or a clean verification boundary.
+
 Prefer the task state model:
 
 `Backlog -> In Progress -> Awaiting Verification -> Done`
@@ -71,6 +89,8 @@ That means:
 - do not wait for a brand-new bespoke prompt between tasks unless the user changes priorities
 
 The ideal steady state is minimal prompting. The issue graph should carry the work.
+
+If the graph already tells you what to do next, continue. Do not pause for permission between routine tasks.
 
 ## Dialectical Autocoding Mapping
 
@@ -114,7 +134,8 @@ Allowed pattern:
    - **No issue tracker:** use `DEPENDENCY_GRAPH.md` plus `HANDOFF.md`
 5. If the repo is not decomposed yet, scaffold the workflow first
 6. If the repo is already decomposed, resume from the next unblocked task and latest handoff
-7. If the project has a Linear issue graph with multiple unblocked issues and the user wants continuous execution, offer to start `/ralph-loop` with a completion promise tied to the issue graph being exhausted
+7. Decide whether to run the loop directly in the current context or hand the long-running player role to `/ralph`
+8. If the project has a Linear issue graph with multiple reachable tasks, default to continuous execution rather than one-task-at-a-time prompting
 
 ## Bootstrap Mode
 
@@ -144,6 +165,14 @@ For each task:
 8. If `FAIL` or `INSUFFICIENT`, fix the exact findings and resubmit
 9. Record verdict, blockers, thread IDs, and next-step state in a durable artifact
 10. If the repo is issue-driven and the task gets `PASS`, move to the next unblocked issue unless the user redirects
+
+After step 10, repeat automatically while:
+
+- there is another reachable unblocked task
+- the user has not changed priorities
+- no external approval or missing information blocks the work
+
+The default `/trimtab` posture is persistent progress, not one-turn compliance.
 
 ## Sub-Agent Rules
 
@@ -210,6 +239,8 @@ The loop should keep running until all issues in the current milestone or projec
 
 If you are inside a Linear-driven project, **default to this behavior**. Do not stop after one issue and wait for a new prompt. The issue graph carries the work.
 
+This is the main anti-chatter rule for `/trimtab`: if the next task is discoverable and unblocked, continue working instead of asking the operator what to do next.
+
 ## When To Use `/ralph`
 
 Use `/ralph` when the value is:
@@ -218,6 +249,14 @@ Use `/ralph` when the value is:
 - automatic plan management and progress tracking
 - context compaction or clearing between issues
 - durable handoffs across long sessions
+
+Default to `/ralph` when:
+
+- there are multiple reachable issues or tasks to burn down
+- the run is likely to outlast one context comfortably
+- the user wants the loop to keep making progress with minimal supervision
+
+If those conditions hold, `/trimtab` should prefer starting or handing off to `/ralph` instead of repeatedly returning to the operator for routine continuation prompts.
 
 When a project uses Linear, `/ralph` is a natural fit for the player loop: it keeps execution moving through the issue graph, handles context management, and provides continuity across issues. The operator can steer from their phone via Remote Control while `/ralph` drives the loop.
 
@@ -246,12 +285,12 @@ Examples:
 
 ## Ralph Integration
 
-When the project has a full issue graph and the user wants continuous execution, `/trimtab` should offer to start `/ralph-loop` as the player execution loop.
+When the project has a full issue graph and the user wants continuous execution, `/trimtab` should prefer to start `/ralph-loop` as the player execution loop.
 
 The integration pattern:
 
 1. `/trimtab` inspects the repo and sets up the workflow
-2. If there is a Linear issue graph (or equivalent) with multiple tasks, `/trimtab` offers to start `/ralph-loop`
+2. If there is a Linear issue graph (or equivalent) with multiple tasks, `/trimtab` should default to `/ralph-loop` unless there is a clear reason to stay in the current context
 3. The `/ralph-loop` prompt should encode the full Trimtab contract:
    - read the next unblocked issue from Linear
    - execute the task and package evidence
